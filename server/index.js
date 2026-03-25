@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/assets', require('./routes/assets'));
 app.use('/api/transfers', require('./routes/transfers'));
-app.use('/api/assignments', require('./routes/assignments'));
+app.use('/api/assignment', require('./routes/assignment'));
 
 app.use((err, req, res, next) => {
   console.error(err.stack);

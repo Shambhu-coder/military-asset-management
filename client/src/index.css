@@ -1,0 +1,194 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --color-military-dark:   #0a0f0d;
+  --color-military-darker: #060a08;
+  --color-military-green:  #1a3a2a;
+  --color-military-olive:  #4a5c3a;
+  --color-military-accent: #4ade80;
+  --color-military-gold:   #fbbf24;
+  --color-military-red:    #ef4444;
+  --color-military-steel:  #94a3b8;
+  --color-military-light:  #e2e8f0;
+
+  --font-military: 'Orbitron', monospace;
+  --font-body:     'Inter', sans-serif;
+
+  --animate-fade-in:    fadeIn 0.5s ease-in-out;
+  --animate-slide-up:   slideUp 0.4s ease-out;
+  --animate-slide-right:slideRight 0.4s ease-out;
+  --animate-glow:       glow 2s ease-in-out infinite alternate;
+  --animate-scan:       scan 3s linear infinite;
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes fadeIn {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes slideUp {
+  0%   { transform: translateY(20px); opacity: 0; }
+  100% { transform: translateY(0);    opacity: 1; }
+}
+@keyframes slideRight {
+  0%   { transform: translateX(-20px); opacity: 0; }
+  100% { transform: translateX(0);     opacity: 1; }
+}
+@keyframes glow {
+  0%   { box-shadow: 0 0 5px #4ade80,  0 0 10px #4ade80; }
+  100% { box-shadow: 0 0 20px #4ade80, 0 0 40px #4ade80; }
+}
+@keyframes scan {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #0a0f0d;
+  color: #e2e8f0;
+  font-family: 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar       { width: 6px; }
+::-webkit-scrollbar-track { background: #0a0f0d; }
+::-webkit-scrollbar-thumb { background: #4ade80; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #22c55e; }
+
+.military-card {
+  background: linear-gradient(145deg, #1a3a2a, #0a0f0d);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  backdrop-filter: blur(8px);
+}
+
+.btn-primary {
+  background-color: #4ade80;
+  color: #0a0f0d;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-family: 'Orbitron', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background-color: #86efac;
+  box-shadow: 0 0 20px rgba(74, 222, 128, 0.4);
+  transform: translateY(-1px);
+}
+.btn-primary:active { transform: scale(0.97); }
+
+.btn-outline {
+  border: 1px solid #4ade80;
+  color: #4ade80;
+  background: transparent;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-family: 'Orbitron', monospace;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.btn-outline:hover {
+  background-color: #4ade80;
+  color: #0a0f0d;
+}
+
+.btn-danger {
+  background-color: #ef4444;
+  color: white;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+.btn-danger:hover {
+  background-color: #f87171;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.4);
+}
+
+.military-input {
+  width: 100%;
+  background-color: #060a08;
+  border: 1px solid rgba(74, 92, 58, 0.4);
+  color: #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  font-family: 'Inter', sans-serif;
+  transition: all 0.3s ease;
+  outline: none;
+}
+.military-input:focus {
+  border-color: #4ade80;
+  box-shadow: 0 0 0 2px rgba(74, 222, 128, 0.15);
+}
+.military-input::placeholder { color: rgba(148, 163, 184, 0.5); }
+
+.military-heading {
+  font-family: 'Orbitron', monospace;
+  color: #4ade80;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.badge-pending  { padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; background: rgba(251,191,36,0.15);  color: #fbbf24; border: 1px solid rgba(251,191,36,0.3); }
+.badge-approved { padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; background: rgba(74,222,128,0.15);  color: #4ade80; border: 1px solid rgba(74,222,128,0.3); }
+.badge-rejected { padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; background: rgba(239,68,68,0.15);   color: #ef4444; border: 1px solid rgba(239,68,68,0.3); }
+.badge-active   { padding: 0.2rem 0.6rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; background: rgba(96,165,250,0.15);  color: #60a5fa; border: 1px solid rgba(96,165,250,0.3); }
+
+.stat-card {
+  background: linear-gradient(145deg, #1a3a2a, #0a0f0d);
+  border: 1px solid rgba(74, 222, 128, 0.15);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: default;
+}
+.stat-card:hover {
+  border-color: rgba(74, 222, 128, 0.4);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 30px rgba(74, 222, 128, 0.1);
+}
+
+.military-table { width: 100%; font-size: 0.875rem; text-align: left; border-collapse: collapse; }
+.military-table th { padding: 0.75rem 1rem; color: #4ade80; font-family: 'Orbitron', monospace; letter-spacing: 0.1em; text-transform: uppercase; font-size: 0.7rem; border-bottom: 1px solid rgba(74,92,58,0.3); background: rgba(26,58,42,0.5); }
+.military-table td { padding: 0.75rem 1rem; color: #e2e8f0; border-bottom: 1px solid rgba(74,92,58,0.2); }
+.military-table tr:hover td { background: rgba(26,58,42,0.3); }
+
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(74,222,128,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74,222,128,0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+.glow-border {
+  box-shadow: 0 0 15px rgba(74,222,128,0.2),
+              inset 0 0 15px rgba(74,222,128,0.05);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(74,222,128,0.8),
+               0 0 20px rgba(74,222,128,0.4);
+}

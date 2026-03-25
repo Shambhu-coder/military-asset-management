@@ -30,96 +30,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', async (req, res) => {
-  try {
-    const asset = await Asset.findById(req.params.id)
-      .populate('purchasedBy', 'name email');
-
-    if (!asset) {
-      return res.status(404).json({
-        success: false,
-        message: 'Asset not found',
-      });
-    }
-
-    res.status(200).json({ success: true, data: asset });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-router.post('/', async (req, res) => {
-  try {
-    const { name, assetType, quantity, base, unitCost, description } = req.body;
-
-    if (req.user.role !== 'admin' && base !== req.user.base) {
-      return res.status(403).json({
-        success: false,
-        message: 'You can only add assets to your own base',
-      });
-    }
-
-    const asset = await Asset.create({
-      name,
-      assetType,
-      quantity,
-      base,
-      unitCost,
-      description,
-      purchasedBy: req.user.id,
-    });
-
-    await asset.populate('purchasedBy', 'name email');
-
-    res.status(201).json({
-      success: true,
-      message: `${name} added to ${base} inventory`,
-      data: asset,
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-router.put('/:id', authorize('admin', 'base_commander'), async (req, res) => {
-  try {
-    const asset = await Asset.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true } 
-    );
-
-    if (!asset) {
-      return res.status(404).json({ success: false, message: 'Asset not found' });
-    }
-
-    res.status(200).json({ success: true, data: asset });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
-router.delete('/:id', authorize('admin'), async (req, res) => {
-  try {
-    const asset = await Asset.findByIdAndUpdate(
-      req.params.id,
-      { isActive: false },
-      { new: true }
-    );
-
-    if (!asset) {
-      return res.status(404).json({ success: false, message: 'Asset not found' });
-    }
-
-    res.status(200).json({
-      success: true,
-      message: 'Asset removed from inventory',
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
-
 router.get('/dashboard/summary', async (req, res) => {
   try {
     const Transfer = require('../models/Transfer');
@@ -227,6 +137,96 @@ router.get('/dashboard/summary', async (req, res) => {
         expenditures,
         currentInventory,
       },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  try {
+    const asset = await Asset.findById(req.params.id)
+      .populate('purchasedBy', 'name email');
+
+    if (!asset) {
+      return res.status(404).json({
+        success: false,
+        message: 'Asset not found',
+      });
+    }
+
+    res.status(200).json({ success: true, data: asset });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.post('/', async (req, res) => {
+  try {
+    const { name, assetType, quantity, base, unitCost, description } = req.body;
+
+    if (req.user.role !== 'admin' && base !== req.user.base) {
+      return res.status(403).json({
+        success: false,
+        message: 'You can only add assets to your own base',
+      });
+    }
+
+    const asset = await Asset.create({
+      name,
+      assetType,
+      quantity,
+      base,
+      unitCost,
+      description,
+      purchasedBy: req.user.id,
+    });
+
+    await asset.populate('purchasedBy', 'name email');
+
+    res.status(201).json({
+      success: true,
+      message: `${name} added to ${base} inventory`,
+      data: asset,
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.put('/:id', authorize('admin', 'base_commander'), async (req, res) => {
+  try {
+    const asset = await Asset.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true } 
+    );
+
+    if (!asset) {
+      return res.status(404).json({ success: false, message: 'Asset not found' });
+    }
+
+    res.status(200).json({ success: true, data: asset });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+router.delete('/:id', authorize('admin'), async (req, res) => {
+  try {
+    const asset = await Asset.findByIdAndUpdate(
+      req.params.id,
+      { isActive: false },
+      { new: true }
+    );
+
+    if (!asset) {
+      return res.status(404).json({ success: false, message: 'Asset not found' });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: 'Asset removed from inventory',
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
