@@ -18,7 +18,7 @@ const generateToken = (user) => {
   );
 };
 
-router.post('/register', protect, authorize('admin'), async (req, res) => {
+router.post('/register', async (req, res) => {
   try {
     const { name, email, password, role, base } = req.body;
 

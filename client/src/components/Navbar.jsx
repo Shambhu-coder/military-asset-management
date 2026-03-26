@@ -1,122 +1,118 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FiBell, FiClock } from 'react-icons/fi';
-import { GiCrossedSwords } from 'react-icons/gi';
 import { useAuth } from '../context/AuthContext.jsx';
 
-// ── Live clock ────────────────────────────────────────────────────────────────
-const LiveClock = () => {
-  const [time, setTime] = useState(new Date());
-  useState(() => {
-    const timer = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(timer);
-  });
-
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-      <FiClock size={13} color="#4a5c3a" />
-      <span style={{
-        fontFamily: 'Orbitron, monospace',
-        fontSize: '0.7rem', color: '#4a5c3a', letterSpacing: '0.1em',
-      }}>
-        {time.toLocaleTimeString('en-US', { hour12: false })}
-      </span>
-    </div>
-  );
+const ROLE_CONFIG = {
+  admin:             { label: 'Admin',             color: '#68d391' },
+  base_commander:    { label: 'Commander',         color: '#f6e05e' },
+  logistics_officer: { label: 'Logistics Officer', color: '#76e4f7' },
 };
 
-export default function Navbar({ sidebarCollapsed }) {
+export default function Navbar({ sidebarCollapsed, onMobileMenuClick }) {
   const { user } = useAuth();
-
-  const ROLE_COLORS = {
-    admin:             '#4ade80',
-    base_commander:    '#fbbf24',
-    logistics_officer: '#60a5fa',
-  };
-  const roleColor = ROLE_COLORS[user?.role] || '#94a3b8';
+  const role = ROLE_CONFIG[user?.role] || ROLE_CONFIG.logistics_officer;
 
   return (
-    <motion.header
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      style={{
-        position: 'fixed', top: 0, right: 0, zIndex: 40,
-        left: sidebarCollapsed ? 72 : 240,
-        transition: 'left 0.3s ease',
-        height: 60,
-        background: 'rgba(10,15,13,0.9)',
-        borderBottom: '1px solid rgba(74,222,128,0.1)',
-        backdropFilter: 'blur(12px)',
-        display: 'flex', alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: '0 1.5rem',
-      }}
-    >
-      {/* Left — page indicator */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-        <GiCrossedSwords size={16} color="#4a5c3a" />
+    <header style={{
+      position: 'fixed',
+      top: 0,
+      right: 0,
+      left: 0,
+      height: 60,
+      backgroundColor: 'var(--bg-navbar)',
+      borderBottom: '1px solid var(--border)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      padding: '0 1.25rem',
+      zIndex: 40,
+    }}>
+
+      {/* Left: mobile menu + title */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+
+        {/* Mobile hamburger */}
+        <button
+          onClick={onMobileMenuClick}
+          className="mobile-menu-btn"
+          style={{
+            background: 'none',
+            border: '1px solid var(--border)',
+            borderRadius: 6,
+            padding: '5px 8px',
+            cursor: 'pointer',
+            color: 'var(--text-secondary)',
+            fontSize: '1rem',
+            display: 'none',
+            transition: 'border-color 0.15s, color 0.15s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-hover)'; e.currentTarget.style.color = 'var(--text-primary)'; }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.color = 'var(--text-secondary)'; }}
+        >
+          ☰
+        </button>
+        <style>{`@media(max-width:768px){ .mobile-menu-btn { display: block !important; } }`}</style>
+
         <span style={{
-          fontFamily: 'Orbitron, monospace',
-          fontSize: '0.65rem', color: '#4a5c3a', letterSpacing: '0.15em',
+          fontFamily: 'var(--font-heading)',
+          fontSize: '0.8rem',
+          fontWeight: 600,
+          color: 'var(--text-muted)',
+          letterSpacing: '0.02em',
         }}>
-          MILITARY ASSET MANAGEMENT SYSTEM
+          Military Asset Management
         </span>
       </div>
 
-      {/* Right — clock, alerts, user */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-        <LiveClock />
-
-        {/* Notification bell */}
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
-          style={{
-            position: 'relative', background: 'none', border: 'none',
-            cursor: 'pointer', color: '#94a3b8',
-          }}
-        >
-          <FiBell size={17} />
-          <span style={{
-            position: 'absolute', top: -3, right: -3,
-            width: 8, height: 8, borderRadius: '50%',
-            background: '#ef4444',
-            border: '1px solid #0a0f0d',
-          }} />
-        </motion.button>
-
-        {/* User chip */}
+      {/* Right: user chip */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        padding: '5px 12px',
+        borderRadius: 8,
+        backgroundColor: 'rgba(255,255,255,0.04)',
+        border: '1px solid var(--border)',
+      }}>
+        {/* Avatar */}
         <div style={{
-          display: 'flex', alignItems: 'center', gap: 10,
-          padding: '5px 12px', borderRadius: 20,
-          background: 'rgba(255,255,255,0.03)',
-          border: '1px solid rgba(74,92,58,0.3)',
+          width: 28,
+          height: 28,
+          borderRadius: '50%',
+          backgroundColor: `${role.color}20`,
+          border: `1px solid ${role.color}50`,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontWeight: 700,
+          fontSize: '0.75rem',
+          color: role.color,
+          fontFamily: 'var(--font-heading)',
+          flexShrink: 0,
         }}>
-          {/* Avatar */}
+          {user?.name?.charAt(0).toUpperCase()}
+        </div>
+
+        {/* Name + role */}
+        <div className="navbar-user-text">
           <div style={{
-            width: 26, height: 26, borderRadius: '50%',
-            background: `${roleColor}20`,
-            border: `1px solid ${roleColor}40`,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontFamily: 'Orbitron, monospace',
-            fontSize: '0.65rem', color: roleColor, fontWeight: 700,
+            fontWeight: 600,
+            fontSize: '0.82rem',
+            color: 'var(--text-primary)',
+            lineHeight: 1.2,
+            whiteSpace: 'nowrap',
           }}>
-            {user?.name?.charAt(0).toUpperCase()}
+            {user?.name}
           </div>
-          <div>
-            <div style={{ color: '#e2e8f0', fontSize: '0.78rem', fontWeight: 500, lineHeight: 1.2 }}>
-              {user?.name}
-            </div>
-            <div style={{
-              fontSize: '0.6rem', color: roleColor,
-              fontFamily: 'Orbitron, monospace', letterSpacing: '0.05em',
-              textTransform: 'uppercase',
-            }}>
-              {user?.role?.replace('_', ' ')}
-            </div>
+          <div style={{
+            fontSize: '0.68rem',
+            color: role.color,
+            fontFamily: 'var(--font-heading)',
+            fontWeight: 500,
+          }}>
+            {role.label}
           </div>
         </div>
+        <style>{`@media(max-width:480px){ .navbar-user-text { display: none; } }`}</style>
       </div>
-    </motion.header>
+    </header>
   );
 }
